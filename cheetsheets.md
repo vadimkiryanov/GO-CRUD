@@ -56,3 +56,8 @@
 
 - migrate -path ./schema -database 'postgres://postgres:qwerty123@localhost:5432/postgres?sslmode=disable' down // 
 - update schema_migrations set version='000001', dirty=false; // исправление dirty бд
+
+[5] Подключение к БД из приложения. Переменные окружения. Библиотека sqlx
+go get -u github.com/jmoiron/sqlx // 
+go get -u github.com/joho/godotenv // Для работы с env переменными 
+
