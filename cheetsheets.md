@@ -2,7 +2,9 @@
 - go get -u github.com/spf13/viper // библиотека для работы с конфигами
 - docker pull postgres // Скачивание образа postgres из докер хаба для работы с postgres
 
-- docker run --name=todo-db -e POSTGRES_PASSWORD=qwerty123 -p 5432:5432 --rm postgres 
+- docker run --name=todo-db -e POSTGRES_PASSWORD=qwerty123 -p 5432:5432 --rm postgres // Создание контейнера с его удалением после остановки
+- docker run --name=todo-db -e POSTGRES_PASSWORD=qwerty123 -p 5432:5432 -v ${HOME}/pgdata/:/var/lib/postgresql/data postgres // Персист данных и сохранение контейнера после остановки 
+
 [
     docker run - базовая команда для запуска нового контейнера
 
