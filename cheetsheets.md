@@ -63,3 +63,6 @@
 go get -u github.com/jmoiron/sqlx // 
 go get -u github.com/joho/godotenv // Для работы с env переменными 
 
+[6] Регистрация пользователей
+- go get -u github.com/sirupsen/logrus // Библиотека для работы с логами 
+
