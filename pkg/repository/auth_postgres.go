@@ -40,3 +40,14 @@ func (repository *AuthPostgres) CreateUser(user todo.User) (int, error) {
 	// Возвращаем ID нового пользователя и nil как ошибку
 	return id, nil
 }
+
+// Получает пользователя из базы данных по его username и паролю
+func (repos *AuthPostgres) GetUser(username, password string) (todo.User, error) {
+	var userFromDb todo.User
+
+	// Формируем SQL запрос
+	query := fmt.Sprintf("SELECT id FROM %s WHERE username=$1 AND password_hash=$2", usersTable)
+	err := repos.db.Get(&userFromDb, query, username, password)
+
+	return userFromDb, err // Возвращаем полученного пользователя и возможную ошибку
+}

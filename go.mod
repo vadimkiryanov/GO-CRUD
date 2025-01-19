@@ -4,7 +4,10 @@ go 1.23.3
 
 require github.com/gin-gonic/gin v1.10.0
 
-require github.com/sirupsen/logrus v1.9.3 // indirect
+require (
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/sirupsen/logrus v1.9.3 // indirect
+)
 
 require (
 	github.com/bytedance/sonic v1.11.6 // indirect
