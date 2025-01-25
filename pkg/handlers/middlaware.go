@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
@@ -12,7 +13,7 @@ const (
 	// Название заголовка для авторизации
 	authorizationHeader = "Authorization"
 	// Ключ контекста для хранения ID пользователя
-	userIdCtx = "userId"
+	userIdCtx string = "userId"
 )
 
 // userIdentity - промежуточное ПО (middleware) для аутентификации пользователя
@@ -48,4 +49,22 @@ func (handler *Handler) userIdentity(ctx *gin.Context) {
 
 	// Сохраняем ID пользователя в контексте для использования в следующих обработчиках
 	ctx.Set(userIdCtx, userId)
+}
+
+func getUserId(ctx *gin.Context) (int, error) {
+	id, ok := ctx.Get(userIdCtx)
+
+	if !ok {
+		NewErrorResponse(ctx, http.StatusInternalServerError, "user id not found")
+		return 0, errors.New("user id not found")
+	}
+
+	idInt, ok := id.(int)
+
+	if !ok {
+		NewErrorResponse(ctx, http.StatusInternalServerError, "user id is of invalid type")
+		return 0, errors.New("user id is of invalid type")
+	}
+	return idInt, nil
+
 }
