@@ -15,14 +15,14 @@ func (handler *Handler) signUp(ctx *gin.Context) {
 
 	// Пытаемся прочитать JSON из запроса и записать в структуру input todo.User
 	if err := ctx.BindJSON(&input); err != nil {
-		NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		newErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	// Пытаемся создать пользователя через сервисный слой
 	id, err := handler.services.Authorization.CreateUser(input)
 	if err != nil {
-		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -43,14 +43,14 @@ func (handler *Handler) signIn(ctx *gin.Context) {
 
 	// Пытаемся прочитать JSON из запроса и записать в структуру input
 	if err := ctx.BindJSON(&input); err != nil {
-		NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		newErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	// Пытаемся создать токен через сервисный слой
 	token, err := handler.services.Authorization.GenerateToken(input.Username, input.Password)
 	if err != nil {
-		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
 

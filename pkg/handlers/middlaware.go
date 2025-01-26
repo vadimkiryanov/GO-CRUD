@@ -23,7 +23,7 @@ func (handler *Handler) userIdentity(ctx *gin.Context) {
 	header := ctx.GetHeader(authorizationHeader)
 	if header == "" {
 		// Если заголовок пустой, возвращаем ошибку
-		NewErrorResponse(ctx, http.StatusUnauthorized, "empty auth header")
+		newErrorResponse(ctx, http.StatusUnauthorized, "empty auth header")
 		return
 	}
 
@@ -34,7 +34,7 @@ func (handler *Handler) userIdentity(ctx *gin.Context) {
 	const validHeaderLength = 2
 	if len(headerParts) != validHeaderLength {
 		// Если формат неверный, возвращаем ошибку
-		NewErrorResponse(ctx, http.StatusUnauthorized, "invalid auth header")
+		newErrorResponse(ctx, http.StatusUnauthorized, "invalid auth header")
 		return
 	}
 
@@ -43,7 +43,7 @@ func (handler *Handler) userIdentity(ctx *gin.Context) {
 	userId, err := handler.services.Authorization.ParseToken(headerParts[1])
 	if err != nil {
 		// Если токен недействительный, возвращаем ошибку
-		NewErrorResponse(ctx, http.StatusUnauthorized, err.Error())
+		newErrorResponse(ctx, http.StatusUnauthorized, err.Error())
 		return
 	}
 
@@ -55,14 +55,14 @@ func getUserId(ctx *gin.Context) (int, error) {
 	id, ok := ctx.Get(userIdCtx)
 
 	if !ok {
-		NewErrorResponse(ctx, http.StatusInternalServerError, "user id not found")
+		newErrorResponse(ctx, http.StatusInternalServerError, "user id not found")
 		return 0, errors.New("user id not found")
 	}
 
 	idInt, ok := id.(int)
 
 	if !ok {
-		NewErrorResponse(ctx, http.StatusInternalServerError, "user id is of invalid type")
+		newErrorResponse(ctx, http.StatusInternalServerError, "user id is of invalid type")
 		return 0, errors.New("user id is of invalid type")
 	}
 	return idInt, nil

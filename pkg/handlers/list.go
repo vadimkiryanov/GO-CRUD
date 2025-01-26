@@ -21,14 +21,14 @@ func (h *Handler) createList(ctx *gin.Context) {
 
 	var input todo.TodoList
 	if err := ctx.BindJSON(&input); err != nil {
-		NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		newErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	id, err := h.services.TodoList.Create(idUser, input)
 
 	if err != nil {
-		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -51,7 +51,7 @@ func (h *Handler) getAllLists(ctx *gin.Context) {
 	lists, err := h.services.TodoList.GetAll(idUser)
 
 	if err != nil {
-		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -70,14 +70,14 @@ func (h *Handler) getListById(ctx *gin.Context) {
 
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		NewErrorResponse(ctx, http.StatusBadRequest, "invalid id param")
+		newErrorResponse(ctx, http.StatusBadRequest, "invalid id param")
 		return
 	}
 
 	list, err := h.services.TodoList.GetById(idUser, id)
 
 	if err != nil {
-		NewErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -85,8 +85,56 @@ func (h *Handler) getListById(ctx *gin.Context) {
 
 }
 func (h *Handler) updateList(ctx *gin.Context) {
+	idUser, ok := getUserId(ctx)
+
+	if ok != nil {
+		return
+	}
+
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		newErrorResponse(ctx, http.StatusBadRequest, "invalid id param")
+		return
+	}
+
+	var input todo.UpdateListInput
+
+	if err := ctx.BindJSON(&input); err != nil {
+		newErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	if err := h.services.Update(idUser, id, input); err != nil {
+		newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, statusResponse{
+		Status: "ok",
+	})
 
 }
 func (h *Handler) deleteList(ctx *gin.Context) {
+	idUser, ok := getUserId(ctx)
 
+	if ok != nil {
+		return
+	}
+
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		newErrorResponse(ctx, http.StatusBadRequest, "invalid id param")
+		return
+	}
+
+	err = h.services.TodoList.Delete(idUser, id)
+
+	if err != nil {
+		newErrorResponse(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, statusResponse{
+		Status: "ok",
+	})
 }
